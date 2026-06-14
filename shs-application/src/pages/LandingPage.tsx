@@ -25,10 +25,10 @@ import {
 // ─── Static Data ─────────────────────────────────────────────────────────────
 
 const NAV_LINKS = [
-  { key: 'home',          label: 'Home',          targetId: 'home' },
-  { key: 'announcements', label: 'Announcements', targetId: 'announcements' },
-  { key: 'portal',        label: 'Portal',        targetId: 'portal' },
-  { key: 'strands',       label: 'Strands',       targetId: 'strands' },
+  { key: 'home',          label: 'HOME',          targetId: 'home' },
+  { key: 'announcements', label: 'ANNOUNCEMENTS', targetId: 'announcements' },
+  { key: 'portal',        label: 'PORTAL',        targetId: 'portal' },
+  { key: 'strands',       label: 'STRANDS',       targetId: 'strands' },
 ];
 
 const ANNOUNCEMENTS = [
@@ -85,6 +85,29 @@ const STRANDS = [
   { key: 'gas',    code: 'GAS',    full: 'General Academic Strand',                        bg: '#78350f', accent: '#fcd34d', students: 178 },
   { key: 'tvl',    code: 'TVL',    full: 'Technical-Vocational-Livelihood',                bg: '#134e4a', accent: '#5eead4', students: 220 },
   { key: 'sports', code: 'Sports', full: 'Sports Track',                                   bg: '#7f1d1d', accent: '#fca5a5', students: 94  },
+];
+
+// ─── Mock Data post ──────────────────────────────────────────────────────────────────
+
+const announcements = [
+  {
+    id: 1,
+    author: "CNHS Senior High School Portal",
+    badge: "Official",
+    date: "June 15, 2026",
+    title: "🚨 ENROLLMENT SCHEDULE FOR INCOMING GRADE 11 (SY 2026-2027)",
+    content: "Attention incoming Grade 11 students! The official enrollment period starts next week. Please prepare your digital copies of Form 138 (Report Card), PSA Birth Certificate, and Certificate of Good Moral Character. Make sure to log into your account to secure your slot early.",
+    imageUrl: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=80&w=800", // High-quality education/campus photo
+  },
+  {
+    id: 2,
+    author: "CNHS Academic Committee",
+    badge: "Urgent",
+    date: "June 12, 2026",
+    title: "📢 General Orientation and Account Activation Update",
+    content: "To all confirmed Grade 11 and Grade 12 students, checking of strands and room assignments can now be done directly through the portal. Kindly complete your profile calibration before the virtual orientation meeting this coming Friday.",
+    imageUrl: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=800", // Study/Desk environment photo
+  }
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -167,89 +190,89 @@ export function LandingPage() {
       />
 
       {/* ─── NAVBAR ─── */}
-      <nav className="sticky top-0 z-50 border-b border-[#00003c]/10 bg-white/92 backdrop-blur-md shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 py-4 flex items-center justify-between">
+<nav className="sticky top-0 z-50 border-b border-[#00003c]/10 bg-white/92 backdrop-blur-md shadow-sm">
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 py-4 flex items-center justify-between">
 
-          {/* Brand */}
-          <button onClick={() => scrollToSection('home')} className="flex items-center gap-3.5">
-            <div className="h-11 w-11 rounded-full overflow-hidden border border-[#00003c]/15 shadow-sm shrink-0">
-              <img src="/logo.png" alt="CNHS" className="h-full w-full object-cover" />
-            </div>
-            <div className="leading-none">
-              <p className="text-[9px] uppercase tracking-[0.2em] font-extrabold text-[#00003c]/50">
-                Cagayan National High School
-              </p>
-              <p className="text-sm font-black tracking-[0.08em] uppercase text-[#00003c]">
-                Senior High Portal
-              </p>
-            </div>
-          </button>
+    {/* Brand */}
+    <button onClick={() => scrollToSection('home')} className="flex items-center gap-3.5">
+      <div className="h-11 w-11 rounded-full overflow-hidden border border-[#00003c]/15 shadow-sm shrink-0">
+        <img src="/logo.png" alt="CNHS" className="h-full w-full object-cover" />
+      </div>
+      <div className="leading-none text-left">
+        {/* Added hidden sm:block to hide on mobile */}
+        <p className="hidden sm:block text-[10px] uppercase tracking-[0.2em] font-extrabold text-[#00003c]/50 mb-0.5">
+          Cagayan National High School
+        </p>
+        <p className="text-sm font-black tracking-[0.08em] uppercase text-[#00003c]">
+          Senior High Portal
+        </p>
+      </div>
+    </button>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-7 text-[11px] uppercase tracking-[0.18em] font-extrabold">
-            {NAV_LINKS.map((item) => (
-              <button
-                key={item.key}
-                onClick={() => scrollToSection(item.targetId)}
-                className={`pb-0.5 border-b-2 transition-colors duration-200 ${
-                  activeSection === item.key
-                    ? 'border-[#00003c] text-[#00003c]'
-                    : 'border-transparent text-[#00003c]/45 hover:text-[#00003c]'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
+    {/* Desktop nav */}
+    <div className="hidden md:flex items-center gap-7 text-[13px] uppercase tracking-[0.18em] font-extrabold">
+      {NAV_LINKS.map((item) => (
+        <button
+          key={item.key}
+          onClick={() => scrollToSection(item.targetId)}
+          className={`pb-0.5 border-b-2 transition-colors duration-200 ${
+            activeSection === item.key
+              ? 'border-[#00003c] text-[#00003c]'
+              : 'border-transparent text-[#00003c]/45 hover:text-[#00003c]'
+          }`}
+        >
+          {item.label}
+        </button>
+      ))}
+    </div>
 
-          {/* Right */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => navigate('/login')}
-              className="flex items-center gap-2 rounded-xl bg-[#00003c] px-5 py-2.5 text-[#ffe088] font-black text-[11px] uppercase tracking-widest hover:brightness-110 transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-px"
-            >
-              <LogIn size={14} />
-              <span className="hidden sm:inline">Student Login</span>
-              <span className="sm:hidden">Login</span>
-            </button>
-            <button
-              className="md:hidden rounded-xl border border-[#00003c]/20 bg-white p-2"
-              onClick={() => setIsMobileMenuOpen(p => !p)}
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen
-                ? <X size={18} className="text-[#00003c]" />
-                : <Menu size={18} className="text-[#00003c]" />}
-            </button>
-          </div>
-        </div>
+    {/* Right */}
+    <div className="flex items-center gap-2">
+      <button
+        onClick={() => navigate('/login')}
+        className="flex items-center gap-2 rounded-xl bg-[#00003c] px-5 py-2.5 text-[#ffe088] font-black text-[11px] uppercase tracking-widest hover:brightness-110 transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-px"
+      >
+        <LogIn size={14} />
+        <span className="hidden sm:inline">Student Login</span>
+        <span className="sm:hidden">Login</span>
+      </button>
+      <button
+        className="md:hidden rounded-xl border border-[#00003c]/20 bg-white p-2"
+        onClick={() => setIsMobileMenuOpen(p => !p)}
+        aria-label="Toggle menu"
+      >
+        {isMobileMenuOpen
+          ? <X size={18} className="text-[#00003c]" />
+          : <Menu size={18} className="text-[#00003c]" />}
+      </button>
+    </div>
+  </div>
 
-        {/* Mobile drawer */}
-        <div className={`md:hidden overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-h-72 border-t border-[#00003c]/10' : 'max-h-0'}`}>
-          <div className="px-4 py-3 bg-white/95 space-y-1.5">
-            {NAV_LINKS.map((item) => (
-              <button
-                key={item.key}
-                onClick={() => scrollToSection(item.targetId)}
-                className={`w-full text-left px-3 py-2.5 rounded-xl text-[11px] uppercase tracking-[0.16em] font-extrabold transition-colors ${
-                  activeSection === item.key
-                    ? 'bg-[#00003c] text-[#ffe088]'
-                    : 'text-[#00003c]/70 bg-[#f7f8fc] hover:bg-[#eef0f8]'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-            <button
-              onClick={() => navigate('/login')}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#00003c] py-3 text-[#ffe088] text-[11px] uppercase tracking-[0.14em] font-black mt-1"
-            >
-              <LogIn size={13} /> Student Login
-            </button>
-          </div>
-        </div>
-      </nav>
-
+  {/* Mobile drawer */}
+  <div className={`md:hidden overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-h-72 border-t border-[#00003c]/10' : 'max-h-0'}`}>
+    <div className="px-4 py-3 bg-white/95 space-y-1.5">
+      {NAV_LINKS.map((item) => (
+        <button
+          key={item.key}
+          onClick={() => scrollToSection(item.targetId)}
+          className={`w-full text-left px-3 py-2.5 rounded-xl text-[11px] uppercase tracking-[0.16em] font-extrabold transition-colors ${
+            activeSection === item.key
+              ? 'bg-[#00003c] text-[#ffe088]'
+              : 'text-[#00003c]/70 bg-[#f7f8fc] hover:bg-[#eef0f8]'
+          }`}
+        >
+          {item.label}
+        </button>
+      ))}
+      <button
+        onClick={() => navigate('/login')}
+        className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#00003c] py-3 text-[#ffe088] text-[11px] uppercase tracking-[0.14em] font-black mt-1"
+      >
+        <LogIn size={13} /> Student Login
+      </button>
+    </div>
+  </div>
+</nav>
       <main className="relative z-10">
 
         {/* ─── HERO ─── */}
@@ -574,7 +597,7 @@ export function LandingPage() {
             <div>
               <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#ffe088] mb-4">Access</p>
               <div className="space-y-2.5 text-xs text-white/50">
-                {['Student Login', 'Faculty Login', 'Admin Login', 'Privacy Policy'].map((label) => (
+                {['Student Login' , 'Privacy Policy'].map((label) => (
                   <button
                     key={label}
                     onClick={() => navigate('/login')}

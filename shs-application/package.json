@@ -15,12 +15,15 @@
     "@tailwindcss/vite": "^4.2.2",
     "@tanstack/react-query": "^5.95.2",
     "axios": "^1.13.6",
+    "buil": "^0.0.0",
+    "build": "^0.1.4",
     "lucide-react": "^1.18.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.13.2",
     "reread": "^0.0.2",
+    "run": "^1.5.0",
     "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
