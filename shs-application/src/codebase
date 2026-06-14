@@ -1,0 +1,354 @@
+    /**
+    * @license
+    * SPDX-License-Identifier: Apache-2.0
+    */
+
+    import React, { useState, useEffect } from 'react';
+    import { 
+    Compass, Award, GraduationCap, ClipboardCheck, MessageSquare, 
+    BookOpen, Bell, Settings, ArrowRight, Map, Menu, X, ArrowUpRight, 
+    LogIn, ArrowUp
+    } from 'lucide-react';
+    import { ActiveTab, Announcement } from './types';
+    import { 
+    SCHOOL_LOGO, HERO_IMAGE, LAB_STUDENTS, mockAnnouncements, DEFAULT_AVATAR 
+    } from './mockData';
+
+    // Modular Page imports
+    import HomeView from './components/HomeView';
+    import EnrollmentGuide from './components/EnrollmentGuide';
+    import CampusMap from './components/CampusMap';
+    import CurriculumExplorer from './components/CurriculumExplorer';
+    import HelpCenter from './components/HelpCenter';
+    import StudentPortal from './components/StudentPortal';
+    import NewsModal from './components/NewsModal';
+
+    export default function App() {
+    const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.Home);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [selectedAnnouncement, setSelectedAnnouncement] = useState<Announcement | null>(null);
+    const [studentLoggedIn, setStudentLoggedIn] = useState(false);
+
+    // Sync login status periodically to display correctly in Navbar profile corner
+    useEffect(() => {
+        const checkLogin = () => {
+        const logged = localStorage.getItem('cnhs_student_logged_in') === 'true';
+        setStudentLoggedIn(logged);
+        };
+        checkLogin();
+        
+        // Add custom window events listener for cross component state syncs
+        window.addEventListener('storage', checkLogin);
+        const interval = setInterval(checkLogin, 1000);
+        
+        return () => {
+        window.removeEventListener('storage', checkLogin);
+        clearInterval(interval);
+        };
+    }, []);
+
+    const handleNavClick = (tab: ActiveTab, e?: React.MouseEvent) => {
+        if (e) e.preventDefault();
+        setActiveTab(tab);
+        setIsMobileMenuOpen(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    
+    const handleHomeAnchorClick = (anchorId: string, e: React.MouseEvent) => {
+        e.preventDefault();
+        
+        if (activeTab !== ActiveTab.Home) {
+        setActiveTab(ActiveTab.Home);
+        // Give React brief moments to render Home before executing scroll
+        setTimeout(() => {
+            const el = document.getElementById(anchorId);
+            if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 100);
+        } else {
+        const el = document.getElementById(anchorId);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        }
+        setIsMobileMenuOpen(false);
+    };
+
+
+    const [showScrollTop, setShowScrollTop] = useState(false);
+
+    useEffect(() => {
+        let scrollTimeout: NodeJS.Timeout;
+
+        const handleScroll = () => {
+        // 1. Dapat lumampas muna ng 300px sa taas para hindi lumitaw habang nasa banner pa
+        if (window.scrollY > 300) {
+            setShowScrollTop(true);
+
+            // 2. I-clear ang lumang timer tuwing may bagong scroll movement
+            clearTimeout(scrollTimeout);
+
+            // 3. Mag-set ng bagong timer. Pagkatapos ng 2 segundo na walang galaw, itatago ang button
+            scrollTimeout = setTimeout(() => {
+            setShowScrollTop(false);
+            }, 2000); // 2000ms = 2 seconds (Pwedeng palitan kung gusto mo mas mabilis/mabagal)
+        } else {
+            setShowScrollTop(false);
+        }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        
+        // Linisin ang event listener at timer kapag nag-unmount ang component
+        return () => {
+        window.removeEventListener('scroll', handleScroll);
+        clearTimeout(scrollTimeout);
+        };
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    return (
+        <div id="cnhs-portal-root" className="min-h-screen bg-background text-on-surface selection:bg-secondary-container selection:text-on-secondary-container flex flex-col font-sans">
+        
+        {/* Background school crest watermark */}
+        <img 
+            alt="School Crest Watermark" 
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50%] h-auto opacity-[0.025] z-0 pointer-events-none select-none" 
+            src={SCHOOL_LOGO} 
+        />
+
+    {/* FIXED TOP NAVIGATION BAR */}
+        <nav id="cnhs-top-navbar" className="bg-white/90 backdrop-blur-md text-primary font-bold border-b border-outline-variant/15 shadow-md sticky top-0 z-50 py-6 px-6 md:px-12 flex justify-between items-center w-full">
+            {/* Brand Logo & Name */}
+    {/* Brand Logo & Name */}
+            <div 
+            onClick={(e) => handleNavClick(ActiveTab.Home, e)} 
+            className="flex items-center gap-4 cursor-pointer select-none group"
+            >
+            {/* Wrapper na pilit na magrerepack ng logo sa hugis bilog */}
+            <div className="w-14 h-14 rounded-full overflow-hidden bg-transparent flex items-center justify-center aspect-square border border-outline-variant/10 shadow-inner">
+                <img 
+                alt="CNHS Logo" 
+                className="w-[115%] h-[115%] max-w-none object-cover scale-105 group-hover:scale-110 transition-transform duration-300" 
+                src={SCHOOL_LOGO} 
+                />
+            </div>
+            <div className="flex flex-col md:flex-row md:items-center md:gap-2 leading-none">
+                <span className="font-headline font-black text-xl md:text-2xl tracking-wide text-secondary uppercase drop-shadow-sm">
+                CNHS
+                </span>
+                <span className="font-headline font-bold text-lg md:text-2xl tracking-tight text-primary font-serif">
+                Senior High Portal
+                </span>
+            </div>
+            </div>
+
+            {/* Navigation links (Desktop) */}
+            <div className="hidden md:flex items-center gap-10 text-sm uppercase tracking-widest font-extrabold">
+            <button 
+                onClick={(e) => handleNavClick(ActiveTab.Home, e)}
+                className={`transition-colors duration-200 cursor-pointer pb-1 ${
+                activeTab === ActiveTab.Home 
+                    ? 'text-secondary border-b-2 border-secondary' 
+                    : 'text-on-surface-variant/80 hover:text-secondary'
+                }`}
+            >
+                Home
+            </button>
+            
+            <button 
+                onClick={(e) => handleHomeAnchorClick('updates-section', e)}
+                className="text-on-surface-variant/80 hover:text-secondary transition-colors duration-200 cursor-pointer pb-1"
+            >
+                News
+            </button>
+            
+            <button 
+                onClick={(e) => handleHomeAnchorClick('updates-section', e)}
+                className="text-on-surface-variant/80 hover:text-secondary transition-colors duration-200 cursor-pointer pb-1"
+            >
+                Announcements
+            </button>
+            </div>
+
+            {/* Action Button & Mobile Menu Toggle */}
+            <div className="flex items-center gap-4">
+            {/* Login Status Action Button */}
+            <button 
+                onClick={() => handleNavClick(ActiveTab.StudentPortal)}
+                title={studentLoggedIn ? "Go to Dashboard" : "Student Login"}
+                className={`p-3 rounded-xl border flex items-center justify-center transition-all duration-200 cursor-pointer shadow-sm ${
+                studentLoggedIn 
+                    ? 'bg-success/10 border-success text-success hover:bg-success/20' 
+                    : 'border-outline-variant/40 text-primary hover:text-secondary hover:border-secondary hover:bg-surface-container-low'
+                }`}
+            >
+                <LogIn size={24} className={studentLoggedIn ? "animate-pulse" : ""} />
+            </button>
+
+            {/* Mobile hamburger menu toggle */}
+            <button 
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="md:hidden text-primary p-2 focus:outline-none"
+            >
+                {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+            </div>
+        </nav>
+        {/* MOBILE EXPANDED NAVIGATION DRAWER */}
+        {isMobileMenuOpen && (
+            <div id="cnhs-mobile-nav" className="md:hidden fixed top-[60px] inset-x-0 bg-white border-b border-outline-variant/20 shadow-2xl z-40 p-5 space-y-4 flex flex-col font-headline font-semibold text-sm">
+            <button 
+                onClick={(e) => handleNavClick(ActiveTab.Home, e)}
+                className={`text-left py-2 border-b border-slate-100 ${
+                activeTab === ActiveTab.Home ? 'text-secondary font-bold' : 'text-primary'
+                }`}
+            >
+                Home View
+            </button>
+            
+            <button 
+                onClick={(e) => handleHomeAnchorClick('updates-section', e)}
+                className="text-left py-2 border-b border-slate-100 text-primary"
+            >
+                News & Updates
+            </button>
+            
+            <button 
+                onClick={(e) => handleHomeAnchorClick('updates-section', e)}
+                className="text-left py-2 border-b border-slate-100 text-primary"
+            >
+                Announcements Board
+            </button>
+
+            <button 
+                onClick={() => handleNavClick(ActiveTab.Enrollment)}
+                className="text-left py-2 border-b border-slate-100 text-[#e85c26]"
+            >
+                Online Enrollment Guide
+            </button>
+
+            <button 
+                onClick={() => handleNavClick(ActiveTab.CampusMap)}
+                className="text-left py-2 border-b border-slate-100 text-primary"
+            >
+                Interactive Campus Map
+            </button>
+
+            <button 
+                onClick={() => handleNavClick(ActiveTab.StudentPortal)}
+                className="bg-[#00003c] text-[#ffe088] py-2.5 rounded-xl text-center text-xs font-bold leading-normal tracking-wider"
+            >
+                STUDENT PORTAL
+            </button>
+            </div>
+        )}
+
+        {/* CENTRAL DYNAMIC ROUTER VIEW */}
+        <main className="flex-1 relative z-10">
+            {activeTab === ActiveTab.Home && (
+            <HomeView 
+                onNavigate={setActiveTab} 
+                onReadAnnouncement={setSelectedAnnouncement}
+            />
+            )}
+            
+            {activeTab === ActiveTab.Enrollment && <EnrollmentGuide />}
+            {activeTab === ActiveTab.CampusMap && <CampusMap />}
+            {activeTab === ActiveTab.Curriculum && <CurriculumExplorer />}
+            {activeTab === ActiveTab.HelpCenter && <HelpCenter />}
+            {activeTab === ActiveTab.StudentPortal && <StudentPortal />}
+        </main>
+
+        {/* COMPACT FOOTER DESIGN */}
+        <footer id="cnhs-footer" className="w-full bg-primary text-white border-t border-white/10 relative z-10 pt-10 pb-6 px-4 md:px-10 text-xs font-semibold">
+            <div className="flex flex-col md:flex-row justify-between w-full items-start md:items-center gap-8 border-b border-white/10 pb-8">
+            <div className="flex items-center gap-3.5 select-none" onClick={() => handleNavClick(ActiveTab.Home)}>
+                <img 
+                alt="Footer Logo" 
+                className="w-11 h-11 brightness-0 invert" 
+                src={SCHOOL_LOGO} 
+                />
+                <div>
+                <span className="font-headline font-bold text-sm md:text-base text-secondary-fixed block">
+                    CNHS Senior High
+                </span>
+                <p className="text-white/60 text-[10px] font-normal leading-tight mt-0.5">
+                    Cagayan Valley's Premier Academic Gateway
+                </p>
+                </div>
+            </div>
+
+            <div className="flex flex-wrap gap-x-6 gap-y-2 uppercase tracking-wider text-[10px]">
+                <a 
+                className="text-white/70 hover:text-[#ffe088] transition-colors" 
+                href="#" 
+                onClick={(e) => { e.preventDefault(); alert('CNHS Privacy Protection Terms enforced in alignment with national laws.'); }}
+                >
+                Privacy Policy
+                </a>
+                <a 
+                className="text-white/70 hover:text-[#ffe088] transition-colors" 
+                href="#"
+                onClick={(e) => { e.preventDefault(); alert('Terms of digital portal usage.'); }}
+                >
+                Terms of Service
+                </a>
+                <a 
+                className="text-white/70 hover:text-[#ffe088] transition-colors" 
+                href="#"
+                onClick={(e) => handleNavClick(ActiveTab.CampusMap, e)}
+                >
+                Campus Map
+                </a>
+                <a 
+                className="text-white/70 hover:text-[#ffe088] transition-colors" 
+                href="#"
+                onClick={(e) => handleNavClick(ActiveTab.HelpCenter, e)}
+                >
+                Directory
+                </a>
+            </div>
+            </div>
+
+            <div className="flex flex-col md:flex-row justify-between w-full pt-4 gap-4 items-center">
+            <p className="text-white/50 text-[10px] font-normal text-center md:text-left">
+                © {new Date().getFullYear()} Cagayan National High School - Senior High School. All rights reserved.
+            </p>
+            <div className="flex gap-4 text-white/50">
+                <span className="hover:text-[#ffe088] cursor-pointer transition-colors" onClick={() => handleNavClick(ActiveTab.HelpCenter)}>Contact Helpdesk</span>
+                <span className="text-white/20">|</span>
+                <span className="hover:text-[#ffe088] cursor-pointer transition-colors" onClick={() => handleNavClick(ActiveTab.StudentPortal)}>Authorize Terminal</span>
+            </div>
+            </div>
+        </footer>
+
+        {/* ANNOUNCEMENT NEWS DETAILED EXPANSION MODAL */}
+        {selectedAnnouncement && (
+            <NewsModal 
+            announcement={selectedAnnouncement} 
+            onClose={() => setSelectedAnnouncement(null)} 
+            />
+        )}
+
+        {/* FLOATING BACK TO TOP BUTTON */}
+        <button
+            onClick={scrollToTop}
+            className={`fixed bottom-8 right-8 z-50 p-4 rounded-full bg-secondary text-white shadow-lg border border-white/10 flex items-center justify-center cursor-pointer transition-all duration-300 transform ${
+            showScrollTop 
+                ? 'opacity-100 translate-y-0 scale-100' 
+                : 'opacity-0 translate-y-4 scale-75 pointer-events-none'
+            } hover:bg-secondary/90 hover:scale-110 active:scale-95`}
+            title="Back to Top"
+        >
+            <ArrowUp size={24} className="animate-pulse" />
+        </button>
+
+        </div>
+    );
+    }
