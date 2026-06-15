@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             TrackSeeder::class,
             StrandSeeder::class,
             TrackStrandSeeder::class,
+            StudentSeeder::class,
         ]);
     }
 }

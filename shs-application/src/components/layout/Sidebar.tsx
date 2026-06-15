@@ -36,7 +36,7 @@ const getNavItems = (userType: UserType | null, role?: UserRole): NavItem[] => {
       { label: 'TSBSR', href: '/tsbsrs', icon: <FileTextIcon className="w-5 h-5" /> },
       { label: 'Students', href: '/students', icon: <PersonIcon className="w-5 h-5" /> },
       { label: 'Enrollments', href: '/enrollments', icon: <IdCardIcon className="w-5 h-5" /> },
-      { label: 'Settings', href: '/settings', icon: <GearIcon className="w-5 h-5" /> },
+      { label: 'Account Settings', href: '/settings', icon: <GearIcon className="w-5 h-5" /> },
     ];
   }
 
