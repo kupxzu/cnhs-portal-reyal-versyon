@@ -87,28 +87,6 @@ const STRANDS = [
   { key: 'sports', code: 'Sports', full: 'Sports Track',                                   bg: '#7f1d1d', accent: '#fca5a5', students: 94  },
 ];
 
-// ─── Mock Data post ──────────────────────────────────────────────────────────────────
-
-const announcements = [
-  {
-    id: 1,
-    author: "CNHS Senior High School Portal",
-    badge: "Official",
-    date: "June 15, 2026",
-    title: "🚨 ENROLLMENT SCHEDULE FOR INCOMING GRADE 11 (SY 2026-2027)",
-    content: "Attention incoming Grade 11 students! The official enrollment period starts next week. Please prepare your digital copies of Form 138 (Report Card), PSA Birth Certificate, and Certificate of Good Moral Character. Make sure to log into your account to secure your slot early.",
-    imageUrl: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&q=80&w=800", // High-quality education/campus photo
-  },
-  {
-    id: 2,
-    author: "CNHS Academic Committee",
-    badge: "Urgent",
-    date: "June 12, 2026",
-    title: "📢 General Orientation and Account Activation Update",
-    content: "To all confirmed Grade 11 and Grade 12 students, checking of strands and room assignments can now be done directly through the portal. Kindly complete your profile calibration before the virtual orientation meeting this coming Friday.",
-    imageUrl: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=800", // Study/Desk environment photo
-  }
-];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
