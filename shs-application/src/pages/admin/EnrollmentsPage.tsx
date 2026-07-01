@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DashboardLayout } from '@/components/layout';
 import { Card, CardHeader, Button, Input, Select, DataTable, Modal, ConfirmModal, Badge, Pagination } from '@/components/ui';
@@ -8,6 +9,7 @@ import type { StudentTrack, Student, Tsbsr, TrackStrand, BuildingSection } from 
 import toast from 'react-hot-toast';
 
 export function EnrollmentsPage() {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -91,14 +93,7 @@ export function EnrollmentsPage() {
     onError: () => toast.error('Failed to delete enrollment'),
   });
 
-  const openCreateModal = () => {
-    setEditingItem(null);
-    setStudentId('');
-    setTsbsrId('');
-    setSchoolYear('2026-2027');
-    setStatus('enrolled');
-    setIsModalOpen(true);
-  };
+
 
   const openEditModal = (item: StudentTrack) => {
     setEditingItem(item);
@@ -203,7 +198,7 @@ export function EnrollmentsPage() {
           title="Manage Enrollments"
           description="Student enrollment records"
           action={
-            <Button onClick={openCreateModal}>
+            <Button onClick={() => navigate('/enrollments/add')}>
               <PlusIcon className="w-4 h-4 mr-2" />
               Add Enrollment
             </Button>

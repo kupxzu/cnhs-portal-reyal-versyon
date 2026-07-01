@@ -8,4 +8,5 @@ export { BuildingSectionsPage } from './BuildingSectionsPage';
 export { TsbsrsPage } from './TsbsrsPage';
 export { StudentsPage } from './StudentsPage';
 export { EnrollmentsPage } from './EnrollmentsPage';
+export { AddEnrollmentPage } from './AddEnrollmentPage';
 export { SettingsPage } from './SettingsPage';

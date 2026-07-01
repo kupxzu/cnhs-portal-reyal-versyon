@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Theme } from '@radix-ui/themes';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ProtectedRoute, PublicRoute } from '@/components/auth';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { DashboardPage, NotFoundPage, LandingPage, LoginPage } from '@/pages';
 import {
   TracksPage,
@@ -13,6 +14,7 @@ import {
   TsbsrsPage,
   StudentsPage,
   EnrollmentsPage,
+  AddEnrollmentPage,
   SettingsPage,
 } from '@/pages/admin';
 import { MyEnrollmentsPage, ProfilePage, MyGradesPage } from '@/pages/student';
@@ -29,10 +31,11 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Theme accentColor="indigo" radius="medium">
-        <BrowserRouter>
-          <AuthProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <Theme accentColor="indigo" radius="medium">
+          <BrowserRouter>
+            <AuthProvider>
             <Routes>
               {/* Public routes */}
               <Route element={<PublicRoute />}>
@@ -60,6 +63,7 @@ function App() {
                 <Route path="/tsbsrs" element={<TsbsrsPage />} />
                 <Route path="/students" element={<StudentsPage />} />
                 <Route path="/enrollments" element={<EnrollmentsPage />} />
+                <Route path="/enrollments/add" element={<AddEnrollmentPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 
                 {/* Student routes */}
@@ -120,7 +124,8 @@ function App() {
           </AuthProvider>
         </BrowserRouter>
       </Theme>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 
